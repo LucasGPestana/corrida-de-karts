@@ -2,7 +2,7 @@ import random
 
 tempos = dict()
 media_corredores = dict()
-
+info_melhor_volta_pessoal = dict()
 
 def calcularMediaDeTempos(voltas_tempo):
     
@@ -10,79 +10,54 @@ def calcularMediaDeTempos(voltas_tempo):
 
     return media_tempos
 
-def verificarMelhorVolta():
+def verificarMelhorVoltaPessoal(corredor):
 
     # Não está funcionando
 
-    for volta in range(0, 10, 1):
-        for corredor in tempos.keys():
-            for corredor2 in tempos.keys():
-              if corredor != corredor2 and tempos[corredor][volta] < tempos[corredor2][volta]: 
-                  menor_tempo = tempos[corredor][volta]
-                  corredor_menor_tempo = corredor
-                  volta_menor_tempo = volta + 1 
-
-    return [volta_menor_tempo, corredor_menor_tempo, menor_tempo]
-
-def verificarRanking():
-
-    # Não está funcionando
-
-    ranking = dict()            
-    posicoes = list()           # Para evitar a sobrescrição de itens pela referência
-    pos = 1                     
-
-    for corredor in tempos.keys():
-        ranking.fromkeys([pos, corredor], media_corredores[corredor])
-        posicoes.append([pos, corredor, media_corredores[corredor]])
-        pos += 1
+    voltas = sorted(tempos_volta, key=tempos_volta.get)
     
-    for pos, corredor, media in ranking.items():
-      for pos2, corredor2, media2 in ranking.items():
-        if corredor != corredor2 and pos > pos2 and media >= media2:
-          posicoes[pos2] = [pos2 + 1, corredor, media] 
-          posicoes[pos] = [pos + 1, corredor2, media2]
+    print(f"A melhor volta de {corredor} foi na {voltas[0]}, com {tempos_volta[voltas[0]]}s")
 
-    return posicoes
+def verificarRanking():    
 
+    pos = 1             
+
+    corredores = sorted(media_corredores, key=media_corredores.get, reverse=False)
+
+    print("RANKING")
+    
+    for corredor in corredores:
+        print(f"{pos}. {corredor} - {media_corredores[corredor]}")
+        pos += 1
 
 for index in range(6):
     
-    tempos_volta = list()
+    tempos_volta = dict()
     
     nome_corredor = input("Digite o nome do corredor: ")
 
-    for volta in range(10):
+    for volta in range(1, 11, 1):
         
-        # tempo_volta = float(input(f"Digite o tempo da volta {volta + 1}: "))
+        # tempo_volta = float(input(f"Digite o tempo, em segundos, da volta {volta}: "))
         tempo_volta = random.choice(range(1, 121))              # Para testes
-        tempos_volta.append(tempo_volta)
+        tempos_volta[volta] = tempo_volta
     
     tempos[nome_corredor] = tempos_volta
 
-for corredor in tempos.keys():           # Teste com o random
-    print(corredor, " = ", tempos[corredor])
+    media_corredor = calcularMediaDeTempos(tempos_volta.values())
 
-for corredor in tempos.keys():
+    media_corredores[nome_corredor] = media_corredor
+
+    verificarMelhorVoltaPessoal(nome_corredor)
+
+# for corredor in tempos.keys():           # Teste com o random
+    # print(corredor, " = ", tempos[corredor])
+
+# for corredor in tempos.keys():              # Teste com o random
     
-    media_corredor = calcularMediaDeTempos(tempos[corredor])
+    # print(corredor, " = ", media_corredores[corredor])
 
-    info_melhor_volta = verificarMelhorVolta()
-
-    media_corredores[corredor] = media_corredor
-
-
-for corredor in tempos.keys():              # Teste com o random
-    
-    print(corredor, " = ", media_corredores[corredor])
-
-ranking = verificarRanking()
-
-print("Ranking")
-
-print(ranking)
-
-print(f"Melhor Volta: {info_melhor_volta[1]}, feito na volta {info_melhor_volta[0]}, com {info_melhor_volta[2]}s")
+verificarRanking()
 
 
 
