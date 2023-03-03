@@ -23,18 +23,11 @@ def verificarMelhorVolta():
 
 def verificarRanking():
     
-    ranking = []
-    
-    for pos in range(6):
-         ranking.append(f"{pos + 1}.{info_corredores[pos][0]} - {info_corredores[pos][1]}")
-    
-    print(ranking)
+    ranking = dict()
+    pos = 1
 
-    for pos in range(6):
-        for pos2 in range(6):
-                if pos != pos2 and pos > pos2 and info_corredores[pos][1] <= info_corredores[pos2][1]:
-                            ranking[pos] = f"{pos2 + 1}.{info_corredores[pos][0]} - {info_corredores[pos][1]}"
-                            ranking[pos2] = f"{pos + 1}.{info_corredores[pos2][0]} - {info_corredores[pos2][1]}"
+    for corredor in tempos:
+        ranking[pos] = [corredor, media_corredores[corredor]]
     
     return ranking
 
